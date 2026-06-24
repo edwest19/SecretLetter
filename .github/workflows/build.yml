@@ -28,5 +28,12 @@ jobs:
     - name: Publish UI project
       run: dotnet publish SecretLetter.UI/SecretLetter.UI.csproj -r win-x64 -c Release --self-contained false -o publish -p:WindowsPackageType=None
 
+    - name: Upload published build
+      uses: actions/upload-artifact@v4
+      with:
+        name: SecretLetter-build
+        path: publish
+
+
 
 
