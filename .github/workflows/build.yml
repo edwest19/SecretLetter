@@ -20,7 +20,7 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore SecretLetter.slnx
+      run: dotnet restore SecretLetter.slnx /p:WindowsAppSDKSelfContained=true /p:WindowsAppSDKVersion=1.5.240404000
 
     - name: Build solution
       run: dotnet build SecretLetter.slnx --configuration Release --no-restore
