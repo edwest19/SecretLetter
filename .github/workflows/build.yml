@@ -1,0 +1,29 @@
+name: Build SecretLetter
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore SecretLetter.slnx
+
+    - name: Build solution
+      run: dotnet build SecretLetter.slnx --configuration Release --no-restore
+
+    - name: Publish UI project
+      run: dotnet publish SecretLetter.UI/SecretLetter.UI.csproj -c Release -o publish
