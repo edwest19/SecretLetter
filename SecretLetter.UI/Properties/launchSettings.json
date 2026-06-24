@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SecretLetter.UI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SecretLetter.UI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

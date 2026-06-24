@@ -1,0 +1,82 @@
+<Window
+    x:Class="SecretLetter.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Secret Letter"
+    >
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" Padding="20">
+
+        <!-- CONFIG FOLDER -->
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button x:Name="BrowseConfigFolderButton"
+             Content="Browse Folder"
+             Width="140"
+        Click="BrowseConfigFolderButton_Click"/>
+            <TextBox x:Name="ConfigFolderPathBox" Width="500" PlaceholderText="Select config folder..."/>
+        </StackPanel>
+
+        <!-- INPUT FILE -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+            <Button x:Name="BrowseInputButton"
+                      Content="Input File"
+                      Width="140"
+                      Click="BrowseInputButton_Click"/>
+            <TextBox x:Name="InputPathBox" Width="500" PlaceholderText="Select input file..."/>
+        </StackPanel>
+
+        <!-- OUTPUT FILE -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+            <Button x:Name="BrowseOutputButton"
+                      Content="Output File"
+                      Width="140"
+                      Click="BrowseOutputButton_Click"/>
+            <TextBox x:Name="OutputPathBox" Width="500" PlaceholderText="Select output file..."/>
+        </StackPanel>
+
+        <!-- ROOT KEY -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+            <Button x:Name="GenerateKeyButton" Content="Generate Key" Width="140"/>
+            <TextBox x:Name="RootKeyBox" Width="500" PlaceholderText="Root key..."/>
+        </StackPanel>
+
+        <!-- DATE CODE -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+            <TextBlock Text="Date Code:" VerticalAlignment="Center"/>
+            <TextBox x:Name="DateCodeBox"
+                       PlaceholderText="XXXX"
+                       MaxLength="4"/>
+
+        </StackPanel>
+
+        <!-- ACTION BUTTONS -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Spacing="10" Margin="0,20,0,0">
+            <Button x:Name="SaveConfigButton"
+                      Content="Save Config"
+                      Width="140"
+                      Click="SaveConfigButton_Click"/>
+            <Button x:Name="RunButton"
+                      Content="Run Code"
+                      Width="140"
+                      Click="RunButton_Click"/>
+            <Button x:Name="CloseButton"
+                      Content="Close App"
+                      Width="120"
+                      Click="CloseButton_Click"/>
+
+        </StackPanel>
+
+        <!-- STATUS BAR -->
+        <Border Grid.Row="7" Background="Black" Height="40" VerticalAlignment="Bottom">
+            <TextBlock x:Name="StatusText"
+                       Text="Status: Ready"
+                       Foreground="Lime"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+    </Grid>
+</Window>
