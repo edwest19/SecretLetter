@@ -26,4 +26,6 @@ jobs:
       run: dotnet build SecretLetter.slnx --configuration Release --no-restore
 
     - name: Publish UI project
-      run: dotnet publish SecretLetter.UI/SecretLetter.UI.csproj -c Release -o publish
+      run: dotnet publish SecretLetter.UI/SecretLetter.UI.csproj -c Release -r win-x64 -o publish --self-contained false
+
+
