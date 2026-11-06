@@ -52,7 +52,7 @@ public sealed class ValidationTests
     [TestMethod]
     public void Passphrase_MustBeAtLeastTheMinimumLength()
     {
-        Assert.AreEqual(8, Validation.MinPassphraseLength);
+        // The limit itself (8) is checked against the README by ReadmeClaimsTests; this checks where it applies.
         Assert.IsNotNull(Validation.PassphraseError(null));
         Assert.IsNotNull(Validation.PassphraseError(""));
         Assert.IsNotNull(Validation.PassphraseError("1234567"));

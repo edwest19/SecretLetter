@@ -133,6 +133,10 @@ namespace SecretLetter.UI
             InputPathBox.Text = config.InputPath;
             OutputPathBox.Text = config.OutputPath;
             RootKeyBox.Text = config.RootKey;
+            // AI-generated (Claude): update the Run button and the second passphrase box here too.
+            // TextChanged wasn't raised when the folder was reopened at start-up, so the button
+            // said "Run" and the second box stayed hidden for a .md letter (found in v1.0.0-rc.1).
+            UpdateForInput();
             RememberConfigFolder(folder);
 
             if (created)
@@ -175,6 +179,7 @@ namespace SecretLetter.UI
                 {
                     InputPathBox.Text = file.Path;
                     OutputPathBox.Text = LetterFiles.SuggestOutputPath(file.Path, OutputPathBox.Text);
+                    UpdateForInput(); // AI-generated (Claude): don't rely on TextChanged alone (see OpenConfigFolder).
                 }
             }
             catch (Exception ex)
