@@ -1,0 +1,14 @@
+<!--
+  AI-GENERATED CODE: This file was written by Claude (Anthropic).
+  SecretLetter is a project built with AI-generated code; see README.md.
+
+  Settings shared by every project in the solution.
+  Version is SecretLetter's version. A release tag vX.Y.Z must match it, SecretLetter.UI/Package.appxmanifest
+  must say X.Y.Z.0, and CHANGELOG.md must have an entry for it (checked by the release workflow
+  and by ReleaseRulesTests).
+-->
+<Project>
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+</Project>

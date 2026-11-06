@@ -1,6 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Application
     x:Class="SecretLetter.UI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SecretLetter.UI">
+    <!--
+      AI-GENERATED CODE (partial): Claude (Anthropic) added the standard WinUI control styles
+      (XamlControlsResources), which the dialogs, password boxes and status bar use.
+      SecretLetter is a project built with AI-generated code; see README.md.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
