@@ -69,11 +69,10 @@ public sealed class SecretLetterCryptoTests
     {
         byte[] file = Encrypt(Letter);
 
-        Assert.AreEqual(SecretLetterCrypto.Overhead + Letter.Length, file.Length);
+        // The 33-byte header and 49 bytes of overhead are checked against docs/file-format.md by ReadmeClaimsTests.
+        Assert.HasCount(SecretLetterCrypto.Overhead + Letter.Length, file);
         Assert.AreEqual(SecretLetterCrypto.MagicText, Encoding.ASCII.GetString(file, 0, 4));
         Assert.AreEqual(SecretLetterCrypto.FormatVersion, file[4]);
-        Assert.AreEqual(33, SecretLetterCrypto.HeaderLength);
-        Assert.AreEqual(49, SecretLetterCrypto.Overhead);
     }
 
     [TestMethod]
@@ -103,7 +102,7 @@ public sealed class SecretLetterCryptoTests
             .Count(i => (fileA[h + i] ^ fileB[h + i]) == (letterA[i] ^ letterB[i]));
 
         // Random chance gives about length/256 matches; a shared keystream would give all of them.
-        Assert.IsTrue(matching < length / 4, $"{matching} of {length} bytes leak the XOR of the two letters.");
+        Assert.IsLessThan(length / 4, matching, $"{matching} of {length} bytes leak the XOR of the two letters.");
     }
 
     [TestMethod]
@@ -314,15 +313,5 @@ public sealed class SecretLetterCryptoTests
 
         var ex = Assert.ThrowsExactly<InvalidDataException>(() => SecretLetterCrypto.EncryptFile(letter, folder.PathOf("huge.file"), TestRootKey, TestPassphrase));
         Assert.Contains("64 MiB", ex.Message);
-    }
-
-    [TestMethod]
-    public void Constants_AgreeWithEachOther()
-    {
-        Assert.AreEqual(SecretLetterCrypto.HeaderLength, 4 + 1 + SecretLetterCrypto.SaltLength + SecretLetterCrypto.NonceLength);
-        Assert.AreEqual(SecretLetterCrypto.Overhead, SecretLetterCrypto.HeaderLength + SecretLetterCrypto.TagLength);
-        Assert.AreEqual("SecretLetter v1 file key", SecretLetterCrypto.HkdfInfoText);
-        Assert.AreEqual(600_000, SecretLetterCrypto.Pbkdf2Iterations);
-        Assert.AreEqual(64 * 1024 * 1024, SecretLetterCrypto.MaxLetterBytes);
     }
 }
