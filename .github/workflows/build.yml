@@ -1,35 +1,98 @@
-name: Build SecretLetter
+# ============================================================================
+# Copyright (c) 2026 Ed. Licensed under the MIT License (see LICENSE).
+# AI-GENERATED CODE: This file was written by Claude (Anthropic), replacing the
+# earlier build-only version. It follows edwest19/SecretKey's build workflow.
+# SecretLetter is a project built with AI-generated code; see README.md.
+# ============================================================================
+#
+# Build: runs on every pull request and every push to main.
+#   test   Runs the tests.
+#   build  Builds the whole solution, then packages the desktop app as an unsigned MSIX
+#          the same way the release workflow does, so packaging problems show up in the
+#          pull request rather than at release time. Nothing here is signed or published.
+#
+# Actions are pinned to exact commits (version in the comment); see release.yml.
+# ============================================================================
+name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
+  workflow_dispatch:
+
+# The workflow only needs to read the code.
+permissions:
+  contents: read
+
+# Turn off the build tools' usage telemetry (.NET CLI and winapp only send it when this isn't "1").
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  WINAPP_CLI_TELEMETRY_OPTOUT: '1'
 
 jobs:
-  build:
+  test:
     runs-on: windows-latest
+    timeout-minutes: 20
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-    - name: Setup .NET 8
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
 
-    - name: Restore dependencies
-      run: dotnet restore SecretLetter.slnx
+      - name: Test
+        run: dotnet test SecretLetter.Core.Tests/SecretLetter.Core.Tests.csproj --configuration Release
 
-    - name: Build solution
-      run: dotnet build SecretLetter.slnx --configuration Release --no-restore
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
 
-    - name: Publish MSIX (self-contained WinAppSDK)
-      run: dotnet publish SecretLetter.UI/SecretLetter.UI.csproj -c Release -r win-x64 -o publish
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-    - name: Upload published build
-      uses: actions/upload-artifact@v4
-      with:
-        name: SecretLetter-MSIX
-        path: publish
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+
+      - name: Set up winapp (Microsoft's Windows App Development CLI)
+        uses: microsoft/setup-WinAppCli@9288bd0729bd3f71e2ed1b9eb247dc91470b824e # v0.3.0
+        with:
+          version: v0.7.1
+
+      - name: Build the solution
+        run: dotnet build SecretLetter.slnx --configuration Release
+
+      - name: Package the MSIX (unsigned, as the release workflow does)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          [xml] $properties = Get-Content -LiteralPath 'Directory.Build.props' -Raw
+          $version = @($properties.Project.PropertyGroup | ForEach-Object { $_.Version } | Where-Object { $_ })[0]
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          $msix = "artifacts/SecretLetter-$version-x64-unsigned.msix"
+          winapp pack SecretLetter.UI/SecretLetter.UI.csproj -c Release --arch x64 --no-sign -p SelfContained=true --output $msix
+          if ($LASTEXITCODE -ne 0) { throw "winapp pack failed with exit code $LASTEXITCODE." }
+          if (-not (Test-Path -LiteralPath $msix)) { throw "winapp pack reported success but $msix is missing." }
+          Write-Host "Packaged $msix ($((Get-Item -LiteralPath $msix).Length) bytes)."
+          [xml] $source = Get-Content -LiteralPath 'SecretLetter.UI/Package.appxmanifest' -Raw
+          $publisher = $source.Package.Identity.Publisher
+          ./scripts/Test-Msix.ps1 -Path $msix -Version "$version.0" -Publisher $publisher
+
+      - name: Keep the unsigned MSIX for inspection
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: SecretLetter-unsigned-msix
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 7

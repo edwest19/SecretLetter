@@ -2,22 +2,27 @@
 
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  xmlns:systemai="http://schemas.microsoft.com/appx/manifest/systemai/windows10"
-  IgnorableNamespaces="uap rescap systemai">
+  IgnorableNamespaces="uap rescap">
 
+  <!--
+    AI-GENERATED CODE (partial): Claude (Anthropic) set the publisher, names, description and
+    version, and removed the unused phone identity and systemAIModels capability.
+    Publisher is the exact name the Artifact Signing certificate (account edwest19, profile
+    CodeSigning-Apps) signs as. It is case-sensitive ("S=ny"), must equal EXPECTED_SIGNER in
+    .github/workflows/release.yml, and is checked by ReleaseRulesTests.
+    Version is Directory.Build.props' Version plus ".0".
+    SecretLetter is a project built with AI-generated code; see README.md.
+  -->
   <Identity
     Name="0042b76b-3a6c-4d57-bd84-e4607f8db0a6"
-    Publisher="CN=edwes"
+    Publisher="CN=Edwin West, O=Edwin West, L=Huntington, S=ny, C=US"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="0042b76b-3a6c-4d57-bd84-e4607f8db0a6" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
   <Properties>
-    <DisplayName>SecretLetter.UI</DisplayName>
-    <PublisherDisplayName>edwes</PublisherDisplayName>
+    <DisplayName>SecretLetter</DisplayName>
+    <PublisherDisplayName>Edwin West</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,19 +40,19 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="SecretLetter.UI"
-        Description="SecretLetter.UI"
+        DisplayName="SecretLetter"
+        Description="Encrypts Markdown letters with a key and a passphrase, entirely on your PC"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"  Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
 
   <Capabilities>
+    <!-- Only runFullTrust: no network, device or AI capabilities (enforced by RepositoryRulesTests). -->
     <rescap:Capability Name="runFullTrust" />
-    <systemai:Capability Name="systemAIModels"/>
   </Capabilities>
 </Package>
